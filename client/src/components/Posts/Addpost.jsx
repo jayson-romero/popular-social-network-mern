@@ -6,10 +6,13 @@ import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary"
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon"
 
 import { useState } from "react"
+import { useStateValue } from "../Login/context/StateProvider"
 
 const Addpost = () => {
 	const [input, setInput] = useState("")
 	const [image, setImage] = useState(null)
+	const [{ user }, dispatch] = useStateValue()
+
 	const handleChange = (e) => {
 		if (e.target.files[0]) setImage(e.target.files[0])
 	}
@@ -20,7 +23,7 @@ const Addpost = () => {
 	return (
 		<MessengerWrapper>
 			<MessengerTop>
-				<Avatar src=" https://pbs.twimg.com/profile_images/1020939891457241088/fcbu814K_400x400.jpg " />
+				<Avatar src={user.photoURL} />
 				<form>
 					<input
 						type="text"

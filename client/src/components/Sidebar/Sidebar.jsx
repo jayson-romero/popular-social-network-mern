@@ -10,13 +10,14 @@ import StorefrontIcon from "@mui/icons-material/Storefront"
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary"
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined"
 
+// State
+import { useStateValue } from "../Login/context/StateProvider"
+
 const Sidebar = () => {
+	const [{ user }, dispatch] = useStateValue()
 	return (
 		<SidebarWrapper>
-			<SidebarRow
-				src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-				title="Jayson Romero"
-			/>
+			<SidebarRow src={user.photoURL} title={user.displayName} />
 			<SidebarRow
 				Icon={LocalHospitalIcon}
 				title="COVID-19 Information Center"

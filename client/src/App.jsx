@@ -6,19 +6,30 @@ import Header from "./components/Header"
 import Sidebar from "./components/Sidebar/Sidebar"
 import Feed from "./components/Feed/Feed"
 import Widget from "./components/Widget"
+import Login from "./components/Login/Login"
+// HOOKS
+import { useState } from "react"
+// REDUCER
+import { useStateValue } from "./components/Login/context/StateProvider"
 
 function App() {
+	const [{ user }, setUser] = useStateValue()
+
 	return (
-		<>
-			<AppWrapper>
-				<Header />
-				<div className="app__body">
-					<Sidebar />
-					<Feed />
-					<Widget />
-				</div>
-			</AppWrapper>
-		</>
+		<AppWrapper>
+			{user ? (
+				<>
+					<Header />
+					<div className="app__body">
+						<Sidebar />
+						<Feed />
+						<Widget />
+					</div>
+				</>
+			) : (
+				<Login />
+			)}
+		</AppWrapper>
 	)
 }
 

@@ -12,7 +12,11 @@ import ForumIcon from "@mui/icons-material/Forum"
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 
+// Reducer
+import { useStateValue } from "./Login/context/StateProvider"
+
 const Header = () => {
+	const [{ user }, dispatch] = useStateValue()
 	return (
 		<HeaderWrapper>
 			<HeaderLeft>
@@ -44,8 +48,8 @@ const Header = () => {
 			</HeaderCenter>
 			<HeaderRight>
 				<div className="header__info">
-					<Avatar src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" />
-					<h4>Jayson Romero</h4>
+					<Avatar src={user.photoURL} />
+					<h4>{user.displayName}</h4>
 				</div>
 				<IconButton>
 					<AddIcon />
