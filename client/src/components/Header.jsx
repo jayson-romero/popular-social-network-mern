@@ -17,6 +17,7 @@ import { useStateValue } from "./Login/context/StateProvider"
 
 const Header = () => {
 	const [{ user }, dispatch] = useStateValue()
+	console.log(user)
 	return (
 		<HeaderWrapper>
 			<HeaderLeft>
@@ -51,6 +52,7 @@ const Header = () => {
 					<Avatar src={user.photoURL} />
 					<h4>{user.displayName}</h4>
 				</div>
+
 				<IconButton>
 					<AddIcon />
 				</IconButton>
