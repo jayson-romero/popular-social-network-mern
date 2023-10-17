@@ -1,12 +1,12 @@
 import multer from "multer"
-import { GridFsStorage } from "multer-gridfs-storage"
+import GridFsStorage from "multer-gridfs-storage"
 import path from "path"
 import mongoose from "mongoose"
 
 const conn = mongoose.connection
 const storage = new GridFsStorage({
+	url: "mongodb+srv://admin123:admin123@popular-social.bmenpsg.mongodb.net/?retryWrites=true&w=majority",
 	db: conn,
-	url: process.env.MONGO_URI,
 	options: { useNewUrlParser: true, useUnifiedTopology: true },
 	file: (req, file) => {
 		return new Promise((resolve, reject) => {
@@ -20,5 +20,5 @@ const storage = new GridFsStorage({
 	},
 })
 
-const upload = multer({ storage })
+const upload = multer({ storage: storage })
 export default upload

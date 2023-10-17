@@ -3,25 +3,41 @@ import Stories from "./Stories"
 import Addpost from "../Posts/Addpost"
 import Post from "../Posts/Post"
 
+import axios from "../../axios.js"
+
+import { useEffect, useState } from "react"
+
 const Feed = () => {
+	const [postsData, setPostsData] = useState([])
+
+	const syncFeed = async () => {
+		try {
+			const res = await axios.get("/posts")
+			console.log(res.data)
+			setPostsData(res.data)
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	useEffect(() => {
+		syncFeed()
+	}, [])
+
 	return (
 		<FeedWrapper>
 			<Stories />
 			<Addpost />
-			<Post
-				profilePic="https://pbs.twimg.com/profile_images/1020939891457241088/fcbu814K_400x400.jpg"
-				message="Awesome post on CSS Animation. Loved it"
-				timestamp="1609512232424"
-				imgName="https://res.cloudinary.com/dxkxvfo2o/image/upload/v1598295332/CSS_Animation_xrvhai.png"
-				username="Nabendu"
-			/>
-			<Post
-				profilePic="https://pbs.twimg.com/profile_images/1020939891457241088/fcbu814K_400x400.jpg"
-				message="Awesome post on CSS Animation. Loved it"
-				timestamp="1609512232424"
-				imgName="https://res.cloudinary.com/dxkxvfo2o/image/upload/v1598295332/CSS_Animation_xrvhai.png"
-				username="Nabendu"
-			/>
+			{postsData.map((post) => (
+				<Post
+					key={post._id}
+					profilePic={post.avatar}
+					message={post.text}
+					timestamp={post.timestamp}
+					imgName={post.imgName}
+					username={post.user}
+				/>
+			))}
 		</FeedWrapper>
 	)
 }
