@@ -8,7 +8,7 @@ import Feed from "./components/Feed/Feed"
 import Widget from "./components/Widget"
 import Login from "./components/Login/Login"
 // HOOKS
-import { useState } from "react"
+
 // REDUCER
 import { useStateValue } from "./components/Login/context/StateProvider"
 

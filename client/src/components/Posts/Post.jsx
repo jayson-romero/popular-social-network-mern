@@ -20,15 +20,10 @@ const Post = ({ profilePic, message, timestamp, imgName, username }) => {
 			<PostBottom>
 				<p>{message}</p>
 			</PostBottom>
-			{imgName ? (
+			{imgName && (
 				<div className="post__image">
-					<img
-						src={`http://localhost:9000/images/single?name=${imgName}`}
-						alt="Posts"
-					/>
+					<img src={imgName} alt="Posts" />
 				</div>
-			) : (
-				console.log("DEBUG >>> no image here")
 			)}
 			<PostOptions>
 				<div className="post__option">
@@ -61,6 +56,9 @@ const PostWrapper = styled.div`
 	.post__image {
 		img {
 			width: 100%;
+			height: 100%;
+			max-height: 500px;
+			object-fit: cover;
 		}
 	}
 `

@@ -1,22 +1,27 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app"
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-	apiKey: "AIzaSyBp6tzFPmF7ukxQUhWx3DEMrvt-e1sfuWw",
-	authDomain: "popular-social-mern-3e856.firebaseapp.com",
-	projectId: "popular-social-mern-3e856",
-	storageBucket: "popular-social-mern-3e856.appspot.com",
-	messagingSenderId: "263469431270",
-	appId: "1:263469431270:web:74364d461c38c68fdd3e27",
+	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+	authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+	projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+	storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+	messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+	appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
+const storage = getStorage(app)
 const provider = new GoogleAuthProvider()
 
-export const signInWithGoogle = () => signInWithPopup(auth, provider)
+const signInWithGoogle = () => signInWithPopup(auth, provider)
+
+export { signInWithGoogle, storage, uploadBytes, getDownloadURL, ref }

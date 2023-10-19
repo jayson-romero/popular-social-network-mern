@@ -4,6 +4,7 @@ import Addpost from "../Posts/Addpost"
 import Post from "../Posts/Post"
 
 import axios from "../../axios.js"
+import Pusher from "pusher-js"
 
 import { useEffect, useState } from "react"
 
@@ -24,6 +25,21 @@ const Feed = () => {
 		syncFeed()
 	}, [])
 
+	// USEEFFECT FOR PUSHER
+	useEffect(() => {
+		const pusher = new Pusher(import.meta.env.VITE_PUSHER_KEY, {
+			cluster: "ap1",
+		})
+		const channel = pusher.subscribe("posts")
+		channel.bind("inserted", (data) => {
+			syncFeed()
+		})
+		return () => {
+			channel.unbind_all()
+			channel.unsubscribe()
+		}
+	}, [])
+
 	return (
 		<FeedWrapper>
 			<Stories />
@@ -32,9 +48,9 @@ const Feed = () => {
 				<Post
 					key={post._id}
 					profilePic={post.avatar}
-					message={post.text}
+					message={post.caption}
 					timestamp={post.timestamp}
-					imgName={post.imgName}
+					imgName={post.image}
 					username={post.user}
 				/>
 			))}

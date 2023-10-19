@@ -9,64 +9,45 @@ import { useState } from "react"
 import { useStateValue } from "../Login/context/StateProvider"
 
 import axios from "../../axios.js"
-import FormData from "form-data"
+import { storage, ref, uploadBytes, getDownloadURL } from "../../firebase.js"
 
 const Addpost = () => {
 	const [input, setInput] = useState("")
 	const [image, setImage] = useState(null)
 	const [{ user }, dispatch] = useStateValue()
 
+	const [url, setUrl] = useState("")
+
 	const handleChange = (e) => {
 		if (e.target.files[0]) setImage(e.target.files[0])
 	}
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault()
-		if (image) {
-			const imgForm = new FormData()
-			imgForm.append("files", image, image.name)
-			try {
-				axios
-					.post("/upload/image", imgForm, {
-						headers: {
-							accept: "application/json",
-							"Accept-Language": "en-US,en;q=0.8",
-							"Content-Type": `multipart/form-data; boundary=${imgForm._boundary}`,
-						},
-					})
-					.then((res) => {
-						const postData = {
-							text: input,
-							imgName: res.data.filename,
-							user: user.displayName,
-							avatar: user.photoURL,
-							timestamp: Date.now(),
-						}
-						savePost(postData)
-					})
-			} catch (error) {
-				console.error("Error uploading image:", error)
-			}
-		} else {
-			try {
-				const postData = {
-					text: input,
-					user: user.displayName,
-					avatar: user.photoURL,
-					timestamp: Date.now(),
-				}
-				savePost(postData)
-			} catch (error) {
-				console.error("Error saving post without image:", error)
-			}
-		}
-		setInput("")
-		setImage(null)
-	}
-
-	const savePost = async (postData) => {
+		if (image == null) return
 		try {
-			const res = await axios.post("/upload/post", postData)
-			console.log(res)
+			const imageRef = ref(storage, `images/${image.name}`)
+			const result = await uploadBytes(imageRef, image)
+			const url = await getDownloadURL(result.ref)
+			if (url) {
+				try {
+					setUrl(url)
+					const response = await axios.post("/upload/post", {
+						user: user.displayName,
+						avatar: user.photoUR,
+						image: url,
+						caption: input,
+						timestamp: Date.now(),
+					})
+					if (response) {
+						alert("post upload success")
+
+						setImage(null)
+						setInput("")
+					}
+				} catch (error) {
+					console.log(error)
+				}
+			}
 		} catch (error) {
 			console.log(error)
 		}
@@ -141,6 +122,7 @@ const MessengerTop = styled.div`
 			width: 20%;
 		}
 		button {
+			visibility: hidden;
 		}
 	}
 `
